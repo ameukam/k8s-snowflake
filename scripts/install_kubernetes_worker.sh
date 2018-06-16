@@ -10,7 +10,7 @@ KUBERNETES_VERSION=v1.10.3
 # From https://github.com/containernetworking/plugins/releases
 # OR
 # curl -sSL https://api.github.com/repos/containernetworking/plugins/releases/latest | jq .tag_name
-CNI_VERSION=v0.6.0
+CNI_VERSION=v0.7.1
 
 # From https://github.com/Azure/azure-container-networking/releases
 # OR
