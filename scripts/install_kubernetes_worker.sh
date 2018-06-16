@@ -20,7 +20,7 @@ AZURE_CNI_VERSION=v0.91
 # From https://github.com/kubernetes-incubator/cri-containerd/releases
 # OR
 # curl -sSL https://api.github.com/repos/kubernetes-incubator/cri-containerd/releases/latest | jq .tag_name
-CRI_CONTAINERD_VERSION=1.0.0-alpha.1
+CRI_CONTAINERD_VERSION=1.1.0
 
 install_cni() {
 	local download_uri="https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-amd64-${CNI_VERSION}.tgz"
@@ -111,10 +111,10 @@ configure() {
 install_kubernetes_worker(){
 	# TODO: remove this when you switch to container os on google cloud
 	if [[ "$CLOUD_PROVIDER" == "google" ]]; then
-		sudo apt-get -y install socat
+		sudo apt-get -y install socat conntrack ipset
 	fi
 	if [[ "$CLOUD_PROVIDER" == "vagrant" ]]; then
-		sudo apt-get -y install socat
+		sudo apt-get -y install socat conntrack ipset
 	fi
 
 	install_cni
