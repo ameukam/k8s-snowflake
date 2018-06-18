@@ -22,6 +22,9 @@ AZURE_CNI_VERSION=v0.91
 # curl -sSL https://api.github.com/repos/kubernetes-incubator/cri-containerd/releases/latest | jq .tag_name
 CRI_CONTAINERD_VERSION=1.1.0
 
+# From https://github.com/opencontainers/runc/releases/
+RUNC_VERSION=v1.0.0-rc5
+
 install_cni() {
 	local download_uri="https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-amd64-${CNI_VERSION}.tgz"
 	local cni_bin="/opt/cni/bin"
@@ -61,11 +64,18 @@ install_azure_cni() {
 		touch /etc/hosts
 	fi
 }
+install_runc(){
+	local download_uri="https://github.com/opencontainers/runc/releases/download/${RUNC_VERSION}/runc.amd64"
+	curl -sSL "$download_uri"
+	sudo mv runc.amd64 runc
+	chmod + ./runc
+	sudo mv runc /usr/local/bin/
+}
 
 install_cri_containerd() {
 	# TODO: fix this when this is merged https://github.com/kubernetes-incubator/cri-containerd/pull/415
 	# local download_uri="https://github.com/kubernetes-incubator/cri-containerd/releases/download/v${CRI_CONTAINERD_VERSION}/cri-containerd-${CRI_CONTAINERD_VERSION}.tar.gz"
-	local download_uri="https://misc.j3ss.co/tmp/cri-containerd-${CRI_CONTAINERD_VERSION}-dirty.tar.gz"
+	local download_uri="https://github.com/containerd/containerd/releases/download/v${CRI_CONTAINERD_VERSION}/containerd-${CRI_CONTAINERD_VERSION}.linux-amd64.tar.gz"
 
 	curl -sSL "$download_uri" | tar -xz -C /
 }
@@ -121,6 +131,8 @@ install_kubernetes_worker(){
 	if [[ "$CLOUD_PROVIDER" == "azure" ]]; then
 		install_azure_cni
 	fi
+
+	install_runc
 	install_cri_containerd
 	install_kubernetes_components
 	configure
