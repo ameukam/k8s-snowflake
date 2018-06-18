@@ -46,7 +46,7 @@ IMAGE_PROJECT="ubuntu-os-cloud"
 
 create_virtual_network() {
 	echo "Creating virtual network ${VIRTUAL_NETWORK_NAME}..."
-	gcloud compute networks create "$VIRTUAL_NETWORK_NAME" --mode custom
+	gcloud compute networks create "$VIRTUAL_NETWORK_NAME" --subnet-mode custom
 	gcloud compute networks subnets create "k8s-subnet" \
 		--network "$VIRTUAL_NETWORK_NAME" \
 		--range 10.240.0.0/24
